@@ -2,7 +2,7 @@ module Walky
   module Parser
     class << self
       def parse(hash, path)
-        paths = path.gsub(/\s+/, "").split(">")
+        paths = path.split(" ")
         return_hash = hash
         paths.each do |pathy|
           return_hash = return_hash[pathy]

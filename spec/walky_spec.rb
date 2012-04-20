@@ -34,36 +34,36 @@ describe Walky do
     end
 
     it "should parse a two level path" do
-      @walky["menu > header"].should be_kind_of(Hash)
+      @walky["menu header"].should be_kind_of(Hash)
     end
 
     it "should parse a last level path" do
-      @walky["menu > header > screen"].should == "LCD" 
+      @walky["menu header screen"].should == "LCD" 
     end
 
     it "should parse by :[] or :walk" do
-      @walky["menu > header > screen"].should == "LCD" 
-      @walky.walk("menu > header > screen").should == "LCD" 
+      @walky["menu header screen"].should == "LCD" 
+      @walky.walk("menu header screen").should == "LCD" 
     end
   end
 
   describe "Walk through hash" do
     it "should access other with same path" do
-      @walky["menu > header"].same_path(@other).should be_kind_of(Array)
-      @walky["menu > header"].same_path(@other)[0].should == @walky["menu > header"]
-      @walky["menu > header"].same_path(@other)[1].should == @other["menu"]["header"]
+      @walky["menu header"].same_path(@other).should be_kind_of(Array)
+      @walky["menu header"].same_path(@other)[0].should == @walky["menu header"]
+      @walky["menu header"].same_path(@other)[1].should == @other["menu"]["header"]
     end
 
     it "should access multiple other hashes with same path" do
-      walked = @walky["menu > header"].same_path(@other, @more_one)
+      walked = @walky["menu header"].same_path(@other, @more_one)
       walked.size.should == 3
-      walked[0].should == @walky["menu > header"]
+      walked[0].should == @walky["menu header"]
       walked[1].should == @other["menu"]["header"]
       walked[2].should == @more_one["menu"]["header"]
     end
     
     it "should take all sub hashes with same path" do
-      walked = @walky["menu > header"].same_path(@other, @more_one).all do |a, b, c|
+      walked = @walky["menu header"].same_path(@other, @more_one).all do |a, b, c|
         a["screen"].should == "LCD"
         b["screen"].should == "LED"
         c["screen"].should == "PLASM"
@@ -74,17 +74,17 @@ describe Walky do
     end
 
     it "should iterate between hashes collection" do
-      @collection["menu > items"].each do |item|
+      @collection["menu items"].each do |item|
         item["item"].should_not be_nil
       end
     end
 
     it "should be able to navigate trough an hash" do
-      @collection["menu > items"].each do |item|
-        Walky.move(item, "cat > keywords").should be_kind_of(Array)
+      @collection["menu items"].each do |item|
+        Walky.move(item, "cat keywords").should be_kind_of(Array)
       end
 
-      Walky.move(@collection["menu > items"].first, "cat > keywords").size.should == 2
+      Walky.move(@collection["menu items"].first, "cat keywords").size.should == 2
     end
   end
 end
