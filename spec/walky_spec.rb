@@ -86,5 +86,26 @@ describe Walky do
 
       Walky.move(@collection["menu items"].first, "cat keywords").size.should == 2
     end
+
+    it 'should walky with symbol keys' do
+      command = {
+        :type => "ls",
+        :params => ["l", "a"]
+      }
+      Walky.move(command, ":type").should == "ls"
+      Walky.move(command, ":params").should == ["l", "a"]
+    end
+
+    it 'should walky with symbols and string keys' do
+      print = {
+        "file" => {
+          :type => "A4",
+          :pages => [1, 2, 3],
+          "password" => "secret"
+        }
+      }
+      Walky.move(print, "file :type").should == "A4"
+      Walky.move(print, "file password").should == "secret"
+    end
   end
 end

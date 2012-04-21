@@ -5,7 +5,11 @@ module Walky
         paths = path.split(" ")
         return_hash = hash
         paths.each do |pathy|
-          return_hash = return_hash[pathy]
+          if pathy =~ /^:/
+            return_hash = return_hash[pathy.gsub(":", "").to_sym]
+          else
+            return_hash = return_hash[pathy]
+          end
         end
 
         return_hash.extend InstanceMethods
