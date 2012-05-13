@@ -17,6 +17,22 @@ module Walky
 
         return_hash
       end
+
+      def extract(hash, path)
+        Walky.move(hash, path)
+      end
+
+      def extract_with_sym(hash, path)
+        symbolize_keys(extract(hash, path))
+      end
+
+      def symbolize_keys(hash)
+        {}.tap do |h|
+          hash.each do |key, value|
+            h[key.to_sym] = value
+          end
+        end
+      end
     end
   end
 end

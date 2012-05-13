@@ -7,6 +7,14 @@ module Walky
     def move(hash, path)
       Walky::Parser.parse(hash, path)
     end
+
+    def extract(hash, path)
+      Walky::Parser.extract(hash, path)
+    end
+
+    def extract_with_sym(hash, path)
+      Walky::Parser.extract_with_sym(hash, path)
+    end
   end
   class Walker
     def initialize(hash)
@@ -27,6 +35,10 @@ module Walky
 
     def self.parse(hash, path)
       Walky::Parser.parse(hash, path)
+    end
+
+    def extract(path)
+      Walky::Parser.extract(@hash, path)
     end
   end
 end

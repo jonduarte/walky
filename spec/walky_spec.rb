@@ -107,5 +107,36 @@ describe Walky do
       Walky.move(print, "file :type").should == "A4"
       Walky.move(print, "file password").should == "secret"
     end
+
+    it "should access keys from a sub key" do
+      print = {
+        "file" => {
+          :type => "A4",
+          :pages => [1, 2, 3],
+          "password" => "secret"
+        }
+      }
+      keys = Walky.extract(print, "file")
+      keys[:type].should == "A4"
+      keys[:pages].should == [1, 2, 3]
+      keys["password"].should == "secret"
+
+      extracted = @walky.extract("menu header")
+      extracted["screen"] = "LCD"
+    end
+
+    it "should access keys from a sub key and symbolize" do
+      print = {
+        "file" => {
+          :type => "A4",
+          :pages => [1, 2, 3],
+          "password" => "secret"
+        }
+      }
+
+      keys = Walky.extract_with_sym(print, "file")
+      keys[:type].should == "A4"
+      keys[:password].should == "secret"
+    end
   end
 end
