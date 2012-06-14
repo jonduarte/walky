@@ -1,4 +1,4 @@
-## Walky - Simple lib to walky through easily hashes and arrays
+## Walky - Simple lib to walky through easily hashes
 
 Walky try create a simple way to access hashes and arrays with many keys easily. 
 Trying to use css-selectors-like, you can move through arrays and hashes and also access others hashes with the _same path_
