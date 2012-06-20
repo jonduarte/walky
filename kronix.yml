@@ -1,0 +1,2 @@
+run: rspec
+project: git://github.com/jhonnyquest/walky.git
