@@ -2,8 +2,6 @@ require 'walky'
 
 describe Walky do
 
-  # Load resources
-  # =============
   before do
     @hash = {"menu"=>{"header"=> {"screen"=>"LCD", "meme" => "Like a boss"}}}
     @other = {"menu"=>{"header"=> {"screen"=>"LED", "meme" => "Poker face"}}}
@@ -22,8 +20,6 @@ describe Walky do
     @walky = Walky::Walker.new(@hash)
   end
 
-  # Examples
-  # =======
   describe "Parse to walk" do
     it "shoul have Walky#[] method" do
       @walky.should respond_to(:[])
@@ -61,7 +57,7 @@ describe Walky do
       walked[1].should == @other["menu"]["header"]
       walked[2].should == @more_one["menu"]["header"]
     end
-    
+
     it "should take all sub hashes with same path" do
       walked = @walky["menu header"].same_path(@other, @more_one).all do |a, b, c|
         a["screen"].should == "LCD"

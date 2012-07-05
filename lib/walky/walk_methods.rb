@@ -2,7 +2,7 @@ module Walky
   module WalkMethods
     def all(&block)
       if block_given?
-        yield(self) 
+        yield(self)
       end
     end
   end

@@ -3,24 +3,23 @@ require 'walky/walk_methods'
 require 'walky/instance_methods'
 
 module Walky
-  class << self
-    def move(hash, path)
-      Walky::Parser.parse(hash, path)
-    end
-
-    def extract(hash, path)
-      Walky::Parser.extract(hash, path)
-    end
-
-    def extract_with_sym(hash, path)
-      Walky::Parser.extract_with_sym(hash, path)
-    end
+  def self.move(hash, path)
+    Walky::Parser.parse(hash, path)
   end
+
+  def self.extract(hash, path)
+    Walky::Parser.extract(hash, path)
+  end
+
+  def self.extract_with_sym(hash, path)
+    Walky::Parser.extract_with_sym(hash, path)
+  end
+
   class Walker
     def initialize(hash)
       @hash = hash
     end
-    
+
     def [](path)
       parse(path)
     end
