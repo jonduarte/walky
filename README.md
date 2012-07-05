@@ -1,13 +1,13 @@
-## Walky - Simple lib to walky through easily hashes and arrays
+## Walky - Simple lib to walky through easily hashes
 
-Walky try create a simple way to access hashes and arrays with many keys easily. 
-Trying to use css-selectors-like, you can move through arrays and hashes and also access others hashes with the _same path_
+Walky try create a simple way to access hashes with many keys easily. 
+You can move through hashes and also access others hashes with the _same path_
 
 Example:
 
 ```ruby
 @hash = { "menu" => { 
-  "header" => {
+  "header"   => {
     "screen" => "LCD", 
     "meme"   => "Like a boss"
   }
@@ -20,11 +20,11 @@ If we have an hash like above, you can use Walky like this:
 @walky = Walky::Walker.new(@hash)
 
 @walky["menu header screen"]      # => "LCD"
-# Or, other way:
+# Or:
 @walky.walk("menu header screen") # => "LCD" 
 ```
 
-Using you want to access multiple hashes that have the same keys that the first, you can use
+If you want to access multiple hashes that have the same keys that the first, you can use
 <tt>Walky#same_path</tt>. Example using with the code above:
 
 ```ruby
