@@ -1,5 +1,9 @@
 ## Walky - Simple lib to walky through easily hashes
 
+[![Build
+Status](https://secure.travis-ci.org/jhonnyquest/walky.png?branch=master)](http://travis-ci.org/jhonnyquest/walky)
+
+
 Walky try create a simple way to access hashes with many keys easily. 
 You can move through hashes and also access others hashes with the _same path_
 
