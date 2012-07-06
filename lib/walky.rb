@@ -1,3 +1,4 @@
+require 'walky/version'
 require 'walky/parser'
 require 'walky/walk_methods'
 require 'walky/instance_methods'
