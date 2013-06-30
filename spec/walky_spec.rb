@@ -54,12 +54,12 @@ describe Walky do
           "password" => "secret"
         }
       }
-      keys = Walky.change_root(print, "file")
+      keys = Walky.move(print, "file")
       keys[:type].should == "A4"
       keys[:pages].should == [1, 2, 3]
       keys["password"].should == "secret"
 
-      extracted = lcd_walky.change_root("eletronics tv")
+      extracted = lcd_walky.move("eletronics tv")
       extracted["screen"] = "LCD"
     end
   end

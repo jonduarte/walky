@@ -25,7 +25,7 @@ module Walky
 
     describe '#walk' do
       it 'parse hash values' do
-        lcd_walky.walk("eletronics tv screen").should == lcd_screen
+        lcd_walky.move("eletronics tv screen").should == lcd_screen
       end
     end
 

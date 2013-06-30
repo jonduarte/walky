@@ -8,10 +8,6 @@ module Walky
     Parser.parse(hash, path)
   end
 
-  def self.change_root(hash, path)
-    Parser.parse(hash, path)
-  end
-
   def self.extract_with_sym(hash, path)
     Parser.extract_with_sym(hash, path)
   end
@@ -21,7 +17,7 @@ module Walky
       @hash = hash
     end
 
-    def parse(path)
+    def move(path)
       Parser.parse(@hash, path)
     end
 
@@ -29,8 +25,6 @@ module Walky
       Parser.parse(hash, path)
     end
 
-    alias_method :[], :parse
-    alias_method :change_root, :parse
-    alias_method :walk, :parse
+    alias_method :[], :move
   end
 end
