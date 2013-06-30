@@ -2,64 +2,66 @@ require 'walky'
 
 describe Walky do
 
+  let(:lcd) { { "eletronics" => { "tv" => { "screen" => "LCD", "digital" => true } } } }
+  let(:led) { { "eletronics" => { "tv" => { "screen" => "LED", "digital" => false } } } }
+  let(:plasm) { { "eletronics" => { "tv" => { "screen" => "PLASM", "digital" => true } } } }
+
+  let(:lcd_walky) { Walky::Walker.new(lcd) }
+
   before do
-    @hash = {"menu"=>{"header"=> {"screen"=>"LCD", "meme" => "Like a boss"}}}
-    @other = {"menu"=>{"header"=> {"screen"=>"LED", "meme" => "Poker face"}}}
-    @more_one = {"menu"=>{"header"=> {"screen"=>"PLASM", "meme" => "LOL"}}}
     @menu_items = {
       "menu" => {
         "items" => [
-          {"item" => "Movie", "cat" => { "keywords" => ["movie", "stories"]}}, 
-          {"item" => "Shop", "cat" => {"keywords" => ["buy", "bussiness"]}}, 
-          {"item" => "Stadium", "cat" => {"keywords" => ["joy", "watch", "fun"]}}, 
+          {"item" => "Movie", "cat" => { "keywords" => ["movie", "stories"]}},
+          {"item" => "Shop", "cat" => {"keywords" => ["buy", "bussiness"]}},
+          {"item" => "Stadium", "cat" => {"keywords" => ["joy", "watch", "fun"]}},
         ]
       }
     }
 
     @collection = Walky::Walker.new(@menu_items)
-    @walky = Walky::Walker.new(@hash)
   end
 
   describe "Parse to walk" do
     it "shoul have Walky#[] method" do
-      @walky.should respond_to(:[])
+      lcd_walky.should respond_to(:[])
     end
 
     it "should parse a simple path" do
-      @walky["menu"].should be_kind_of(Hash)
+      lcd_walky["eletronics"].should be_kind_of(Hash)
     end
 
     it "should parse a two level path" do
-      @walky["menu header"].should be_kind_of(Hash)
+      lcd_walky["eletronics tv"].should be_kind_of(Hash)
     end
 
     it "should parse a last level path" do
-      @walky["menu header screen"].should == "LCD" 
+      lcd_walky["eletronics tv screen"].should == "LCD"
     end
 
     it "should parse by :[] or :walk" do
-      @walky["menu header screen"].should == "LCD" 
-      @walky.walk("menu header screen").should == "LCD" 
+      lcd_walky["eletronics tv screen"].should == "LCD"
+      lcd_walky.walk("eletronics tv screen").should == "LCD"
     end
   end
 
   describe "Walk through hash" do
     it "should access other with same path" do
-      @walky["menu header"].same_path(@other).should be_kind_of(Array)
-      @walky["menu header"].same_path(@other)[0].should == @walky["menu header"]
-      @walky["menu header"].same_path(@other)[1].should == @other["menu"]["header"]
+      lcd_walky["eletronics tv"].same_path(led).should be_kind_of(Array)
+      lcd_walky["eletronics tv"].same_path(led)[0].should == lcd_walky["eletronics tv"]
+      lcd_walky["eletronics tv"].same_path(led)[1].should == led["eletronics"]["tv"]
     end
 
     it "should access multiple other hashes with same path" do
-      walked = @walky["menu header"].same_path(@other, @more_one)
+      walked = lcd_walky["eletronics tv"].same_path(led, plasm)
       walked.size.should == 3
-      walked[0].should == @walky["menu header"]
-      walked[1].should == @other["menu"]["header"]
-      walked[2].should == @more_one["menu"]["header"]
+      walked[0].should == lcd_walky["eletronics tv"]
+      walked[1].should == led["eletronics"]["tv"]
+      walked[2].should == plasm["eletronics"]["tv"]
     end
 
     it "should take all sub hashes with same path" do
-      walked = @walky["menu header"].same_path(@other, @more_one).all do |a, b, c|
+      walked = lcd_walky["eletronics tv"].same_path(led, plasm).all do |a, b, c|
         a["screen"].should == "LCD"
         b["screen"].should == "LED"
         c["screen"].should == "PLASM"
@@ -117,7 +119,7 @@ describe Walky do
       keys[:pages].should == [1, 2, 3]
       keys["password"].should == "secret"
 
-      extracted = @walky.extract("menu header")
+      extracted = lcd_walky.extract("eletronics tv")
       extracted["screen"] = "LCD"
     end
 

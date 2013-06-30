@@ -1,4 +1,10 @@
+PATH
+  remote: .
+  specs:
+    walky (0.0.1)
+
 GEM
+  remote: https://rubygems.org/
   specs:
     diff-lcs (1.1.3)
     rspec (2.10.0)
@@ -14,4 +20,5 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  rspec (~> 2.10)
+  rspec
+  walky!
