@@ -45,8 +45,8 @@ describe Walky do
     end
   end
 
-  describe '.extract' do
-    it "change hash root" do
+  describe '.change_root' do
+    it "change the parent of hash" do
       print = {
         "file" => {
           :type => "A4",
@@ -54,12 +54,12 @@ describe Walky do
           "password" => "secret"
         }
       }
-      keys = Walky.extract(print, "file")
+      keys = Walky.change_root(print, "file")
       keys[:type].should == "A4"
       keys[:pages].should == [1, 2, 3]
       keys["password"].should == "secret"
 
-      extracted = lcd_walky.extract("eletronics tv")
+      extracted = lcd_walky.change_root("eletronics tv")
       extracted["screen"] = "LCD"
     end
   end

@@ -17,12 +17,8 @@ module Walky
       return_hash
     end
 
-    def self.extract(hash, path)
-      parse(hash, path)
-    end
-
     def self.extract_with_sym(hash, path)
-      symbolize_keys(extract(hash, path))
+      symbolize_keys(parse(hash, path))
     end
 
     def self.symbolize_keys(hash)
