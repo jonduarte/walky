@@ -17,16 +17,9 @@ module Walky
   end
 
   class Walker
+
     def initialize(hash)
       @hash = hash
-    end
-
-    def [](path)
-      parse(path)
-    end
-
-    def walk(path)
-      parse(path)
     end
 
     def parse(path)
@@ -40,5 +33,8 @@ module Walky
     def extract(path)
       Walky::Parser.extract(@hash, path)
     end
+
+    alias_method :[], :parse
+    alias_method :walk, :parse
   end
 end

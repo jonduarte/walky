@@ -18,7 +18,7 @@ module Walky
     end
 
     def self.extract(hash, path)
-      Walky.move(hash, path)
+      parse(hash, path)
     end
 
     def self.extract_with_sym(hash, path)
