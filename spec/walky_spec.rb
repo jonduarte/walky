@@ -43,10 +43,8 @@ describe Walky do
 
       Walky.move(collection["menu items"].first, "cat keywords").size.should == 2
     end
-  end
 
-  describe '.change_root' do
-    it "change the parent of hash" do
+    it "returns new hash root" do
       print = {
         "file" => {
           :type => "A4",
@@ -61,22 +59,6 @@ describe Walky do
 
       extracted = lcd_walky.move("eletronics tv")
       extracted["screen"] = "LCD"
-    end
-  end
-
-  describe '.extract_with_sym' do
-    it "change hash root and symbolize hash keys" do
-      print = {
-        "file" => {
-          :type => "A4",
-          :pages => [1, 2, 3],
-          "password" => "secret"
-        }
-      }
-
-      keys = Walky.extract_with_sym(print, "file")
-      keys[:type].should == "A4"
-      keys[:password].should == "secret"
     end
   end
 end

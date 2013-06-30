@@ -8,10 +8,6 @@ module Walky
     Parser.parse(hash, path)
   end
 
-  def self.extract_with_sym(hash, path)
-    Parser.extract_with_sym(hash, path)
-  end
-
   class Walker
     def initialize(hash)
       @hash = hash
