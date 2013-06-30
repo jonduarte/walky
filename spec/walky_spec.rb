@@ -2,22 +2,7 @@ require 'walky'
 
 describe Walky do
   let(:lcd) { { "eletronics" => { "tv" => { "screen" => "LCD", "digital" => true } } } }
-
   let(:lcd_walky) { Walky::Walker.new(lcd) }
-
-  before do
-    @menu_items = {
-      "menu" => {
-        "items" => [
-          {"item" => "Movie", "cat" => { "keywords" => ["movie", "stories"]}},
-          {"item" => "Shop", "cat" => {"keywords" => ["buy", "bussiness"]}},
-          {"item" => "Stadium", "cat" => {"keywords" => ["joy", "watch", "fun"]}},
-        ]
-      }
-    }
-
-    @collection = Walky::Walker.new(@menu_items)
-  end
 
   describe '.move' do
     it 'parse symbols and string keys' do
@@ -42,11 +27,21 @@ describe Walky do
     end
 
     it 'ensure that can navigate when iterating' do
-      @collection["menu items"].each do |item|
+      collection = Walky::Walker.new({
+        "menu" => {
+          "items" => [
+            {"item" => "Movie",   "cat" => {"keywords" => ["movie", "stories"]    }},
+            {"item" => "Shop",    "cat" => {"keywords" => ["buy", "bussiness"]    }},
+            {"item" => "Stadium", "cat" => {"keywords" => ["joy", "watch", "fun"] }},
+          ]
+        }
+      })
+
+      collection["menu items"].each do |item|
         Walky.move(item, "cat keywords").should be_kind_of(Array)
       end
 
-      Walky.move(@collection["menu items"].first, "cat keywords").size.should == 2
+      Walky.move(collection["menu items"].first, "cat keywords").size.should == 2
     end
   end
 
