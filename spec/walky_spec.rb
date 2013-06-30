@@ -22,79 +22,8 @@ describe Walky do
     @collection = Walky::Walker.new(@menu_items)
   end
 
-  describe "Parse to walk" do
-    it "shoul have Walky#[] method" do
-      lcd_walky.should respond_to(:[])
-    end
-
-    it "should parse a simple path" do
-      lcd_walky["eletronics"].should be_kind_of(Hash)
-    end
-
-    it "should parse a two level path" do
-      lcd_walky["eletronics tv"].should be_kind_of(Hash)
-    end
-
-    it "should parse a last level path" do
-      lcd_walky["eletronics tv screen"].should == "LCD"
-    end
-
-    it "should parse by :[] or :walk" do
-      lcd_walky["eletronics tv screen"].should == "LCD"
-      lcd_walky.walk("eletronics tv screen").should == "LCD"
-    end
-  end
-
-  describe "Walk through hash" do
-    it "should access other with same path" do
-      lcd_walky["eletronics tv"].same_path(led).should be_kind_of(Array)
-      lcd_walky["eletronics tv"].same_path(led)[0].should == lcd_walky["eletronics tv"]
-      lcd_walky["eletronics tv"].same_path(led)[1].should == led["eletronics"]["tv"]
-    end
-
-    it "should access multiple other hashes with same path" do
-      walked = lcd_walky["eletronics tv"].same_path(led, plasm)
-      walked.size.should == 3
-      walked[0].should == lcd_walky["eletronics tv"]
-      walked[1].should == led["eletronics"]["tv"]
-      walked[2].should == plasm["eletronics"]["tv"]
-    end
-
-    it "should take all sub hashes with same path" do
-      walked = lcd_walky["eletronics tv"].same_path(led, plasm).all do |a, b, c|
-        a["screen"].should == "LCD"
-        b["screen"].should == "LED"
-        c["screen"].should == "PLASM"
-
-        "#{a["screen"]}#{b["screen"]}#{c["screen"]}"
-      end
-      walked.should == "LCDLEDPLASM"
-    end
-
-    it "should iterate between hashes collection" do
-      @collection["menu items"].each do |item|
-        item["item"].should_not be_nil
-      end
-    end
-
-    it "should be able to navigate trough an hash" do
-      @collection["menu items"].each do |item|
-        Walky.move(item, "cat keywords").should be_kind_of(Array)
-      end
-
-      Walky.move(@collection["menu items"].first, "cat keywords").size.should == 2
-    end
-
-    it 'should walky with symbol keys' do
-      command = {
-        :type => "ls",
-        :params => ["l", "a"]
-      }
-      Walky.move(command, ":type").should == "ls"
-      Walky.move(command, ":params").should == ["l", "a"]
-    end
-
-    it 'should walky with symbols and string keys' do
+  describe '.move' do
+    it 'parse symbols and string keys' do
       print = {
         "file" => {
           :type => "A4",
@@ -106,7 +35,18 @@ describe Walky do
       Walky.move(print, "file password").should == "secret"
     end
 
-    it "should access keys from a sub key" do
+    it 'parse only symbol params' do
+      command = {
+        :type   => "ls",
+        :params => ["l", "a"]
+      }
+      Walky.move(command, ":type").should == "ls"
+      Walky.move(command, ":params").should == ["l", "a"]
+    end
+  end
+
+  describe '.extract' do
+    it "change hash root" do
       print = {
         "file" => {
           :type => "A4",
@@ -122,8 +62,10 @@ describe Walky do
       extracted = lcd_walky.extract("eletronics tv")
       extracted["screen"] = "LCD"
     end
+  end
 
-    it "should access keys from a sub key and symbolize" do
+  describe '.extract_with_sym' do
+    it "change hash root and symbolize hash keys" do
       print = {
         "file" => {
           :type => "A4",
@@ -135,6 +77,73 @@ describe Walky do
       keys = Walky.extract_with_sym(print, "file")
       keys[:type].should == "A4"
       keys[:password].should == "secret"
+    end
+  end
+
+  describe Walky::Walker do
+    let(:lcd_screen) { lcd["eletronics"]["tv"]["screen"] }
+
+    describe '#[]' do
+      it 'parse hash values' do
+        lcd_walky["eletronics"].should be_kind_of(Hash)
+      end
+
+      it "parse two level path" do
+        lcd_walky["eletronics tv"].should be_kind_of(Hash)
+      end
+
+      it "parse last level path" do
+        lcd_walky["eletronics tv screen"].should == lcd_screen
+      end
+    end
+
+    describe '#walk' do
+      it 'parse hash values' do
+        lcd_walky.walk("eletronics tv screen").should == lcd_screen
+      end
+    end
+
+    describe '#same_path' do
+      it 'access two hash with same path at same time' do
+        lcd_walky["eletronics tv"].same_path(led).should be_kind_of(Array)
+        lcd_walky["eletronics tv"].same_path(led)[0].should == lcd_walky["eletronics tv"]
+        lcd_walky["eletronics tv"].same_path(led)[1].should == led["eletronics"]["tv"]
+      end
+
+      it 'access multiple hashes with same path at same time' do
+        walked = lcd_walky["eletronics tv"].same_path(led, plasm)
+        walked.size.should == 3
+        walked[0].should == lcd_walky["eletronics tv"]
+        walked[1].should == led["eletronics"]["tv"]
+        walked[2].should == plasm["eletronics"]["tv"]
+      end
+
+      it 'can also access sub paths from all related hashes' do
+        walked = lcd_walky["eletronics tv"].same_path(led, plasm).all do |a, b, c|
+          a["screen"].should == "LCD"
+          b["screen"].should == "LED"
+          c["screen"].should == "PLASM"
+
+          "#{a["screen"]}#{b["screen"]}#{c["screen"]}"
+        end
+        walked.should == "LCDLEDPLASM"
+      end
+    end
+
+    describe '#each' do
+      it 'ensure that each work properly' do
+        @collection["menu items"].each do |item|
+          item["item"].should_not be_nil
+        end
+      end
+
+      it 'ensure that can navigate when iterating' do
+        @collection["menu items"].each do |item|
+          Walky.move(item, "cat keywords").should be_kind_of(Array)
+        end
+
+        Walky.move(@collection["menu items"].first, "cat keywords").size.should == 2
+      end
     end
   end
 end
